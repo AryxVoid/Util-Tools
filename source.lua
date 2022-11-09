@@ -1668,8 +1668,86 @@ function wyvern:Client()
     return self
 end
 
+local glitch = {}
+
+local rs = game:GetService'ReplicatedStorage'
+local TweenService = game:GetService('TweenService')
+local RunService = game:GetService('RunService')
+local TextGlitcher = loadstring(game:HttpGet("https://raw.githubusercontent.com/Zirmith/Util-Tools/main/glitchModule"))()
+
+local function has_space(str)
+	return string.find(str," ")
+end
+
+
+function glitch:new(ob)
+	local func = {}
+	func.text = ""
+	func.objText = ""
+	func.speed = ""
+	
+	func.getTextObject = function(ob)
+		func.textobject = ob
+		func.objText = func.textobject.Text
+	end
+	
+	func.currentglitch = nil
+	
+	func.addTextGlitch = function(speed, text , obj)
+		local f3 = {}
+		func.speed = speed
+		func.complete = nil
+		
+		
+		
+		func.currentglitch = TextGlitcher.new(text, obj,{
+			TweenInfo = TweenInfo.new(speed, Enum.EasingStyle.Bounce, Enum.EasingDirection.InOut),
+			Reversed = false, SingleHash = false, Yielding = true
+		})
+		
+		if(func.currentglitch:IsCompleted()) then
+			func.complete = true
+		end
+		
+		f3.start = function()
+			func.currentglitch:GlitchText()
+		end
+		f3.pause = function()
+			func.currentglitch:Pause()
+		end
+		f3.cancel = function()
+			func.currentglitch:Cancel()
+		end
+		f3.clear = function()
+			func.currentglitch = TextGlitcher.new('  ', obj,{
+				TweenInfo = TweenInfo.new(func.speed, Enum.EasingStyle.Bounce, Enum.EasingDirection.InOut),
+				Reversed = true, SingleHash = false, Yielding = true
+			})
+			f3.start()
+		end
+		
+		f3.resume = function()
+			func.currentglitch:Resume()
+		end
+		
+		f3.edit = function(text2)
+			if has_space(text2) then
+				text2 = text:gsub("%s+", "_")
+			end
+			func.currentglitch = TextGlitcher.new(text2, obj,{
+				TweenInfo = TweenInfo.new(func.speed, Enum.EasingStyle.Bounce, Enum.EasingDirection.InOut),
+				Reversed = false, SingleHash = false, Yielding = true
+			})
+			f3.start()
+		end
+		
+		return f3
+	end
+
+	return func
+end
 
 
 
 
-return util , wyvern
+return util , wyvern , glitch
