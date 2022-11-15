@@ -216,7 +216,7 @@ local translate, getISOCode do
     local fsid, bl
 
     do -- init
-        print('initialize')
+        --print('initialize')
         local InitialReq = got(rootURL)
         fsid = InitialReq.Body:match('"FdrFJe":"(.-)"')
         bl = InitialReq.Body:match('"cfb2h":"(.-)"')
@@ -350,10 +350,10 @@ end
 
 do -- :Chatted replacement!!
     function get(plr, msg)
-        print(msg)
+       -- print(msg)
         local tab = translateFrom(msg)
         local translation = tab[1]
-        print(translation)
+        --print(translation)
         if translation then
             properties.Text = "("..tab[2]:upper()..") ".."[".. plr .."]: "..translation
             StarterGui:SetCore("ChatMakeSystemMessage", properties)
